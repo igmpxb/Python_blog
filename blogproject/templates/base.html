@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black &amp; White</title>
+    <title>柠檬小站&个人Blog</title>
 
     <!-- meta -->
     <meta charset="UTF-8">
@@ -108,7 +108,7 @@
                         {% get_categories as categories_list %}
                         {% for categorie in categories_list %}
                         <li>
-                            <a href="{% url 'blog:category' categorie.pk %}">{{ categorie.name }} <span class="post-count">(13)</span></a>
+                            <a href="{% url 'blog:category' categorie.pk %}">{{ categorie.name }} <span class="post-count">({{ categorie.post_set.count }})</span></a>
                         </li>
                         {% empty %}
                         暂无分类！

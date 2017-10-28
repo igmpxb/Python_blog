@@ -861,6 +861,11 @@ img {
     margin-top: 15px;
 }
 
+.comment-area .comment-harder {
+    padding-top: 5px;
+    font-size: 50px;
+}
+
 .comment-item:not(:last-child) {
     border-bottom: 1px #ccc solid;
     margin-bottom: 20px;
@@ -881,6 +886,7 @@ img {
     padding-top: 5px;
     font-size: 16px;
 }
+
 
 /**
  * 13.0 - Pagination
