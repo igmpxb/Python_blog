@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils.html import strip_tags
+import markdown
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -29,3 +31,16 @@ class Post(models.Model):
         return reverse('blog:detail', kwargs={'pk': self.pk})
     def click_rate_add(self):
         self.click_rate=self.click_rate+1
+    def save(self, *args, **kwargs):
+        # 如果没有填写摘要
+        if not self.abstract:
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+            ])
+            # strip_tags 去掉 HTML 文本的全部 HTML 标签
+            # 从文本摘取前 54 个字符赋给 excerpt
+            self.abstract = strip_tags(md.convert(self.body))[:54]
+
+        # 调用父类的 save 方法将数据保存到数据库中
+        super(Post, self).save(*args, **kwargs)
