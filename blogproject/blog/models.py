@@ -31,6 +31,7 @@ class Post(models.Model):
         return reverse('blog:detail', kwargs={'pk': self.pk})
     def click_rate_add(self):
         self.click_rate=self.click_rate+1
+        self.save()
     def save(self, *args, **kwargs):
         # 如果没有填写摘要
         if not self.abstract:
