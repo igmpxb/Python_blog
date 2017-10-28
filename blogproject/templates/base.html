@@ -1,5 +1,5 @@
 {% load staticfiles %}
-
+{% load blog_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md-4 col-sm-5 col-xs-8">
                 <div class="logo">
-                    <h1><a href="{% url 'blog:index' %}"><b>Black</b> &amp; White</a></h1>
+                    <h1><a href="{% url 'blog:index' %}"><b>柠檬小站</b>  </a></h1>
                 </div>
             </div><!-- col-md-4 -->
             <div class="col-md-8 col-sm-7 col-xs-4">
@@ -77,45 +77,42 @@
                 {% endblock toc %}
                 <div class="widget widget-recent-posts">
                     <h3 class="widget-title">最新文章</h3>
+                    {% get_recent_posts as recent_post_list %}
                     <ul>
+                        {% for post in recent_post_list %}
                         <li>
-                            <a href="#">我有一只</a>
+                             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
                         </li>
-                        <li>
-                            <a href="#">哈哈哈</a>
-                        </li>
-                        <li>
-                            <a href="#">部署 Django 博客</a>
-                        </li>
+                        {% empty %}
+                        暂无文章！
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="widget widget-archives">
                     <h3 class="widget-title">归档</h3>
                     <ul>
+                        {% archives as date_list %}
+                        {% for date in date_list %}
                         <li>
-                            <a href="#">2017 年 5 月</a>
+                            <a href="{% url 'blog:archives' date.year date.month %}">{{ date.year }} 年 {{ date.month }} 月</a>
                         </li>
-                        <li>
-                            <a href="#">2017 年 4 月</a>
-                        </li>
-                        <li>
-                            <a href="#">2017 年 3 月</a>
-                        </li>
+                        {% empty %}
+                        暂无归档！
+                        {% endfor %}
                     </ul>
                 </div>
 
                 <div class="widget widget-category">
                     <h3 class="widget-title">分类</h3>
                     <ul>
+                        {% get_categories as categories_list %}
+                        {% for categorie in categories_list %}
                         <li>
-                            <a href="#">休闲日记 <span class="post-count">(13)</span></a>
+                            <a href="{% url 'blog:category' categorie.pk %}">{{ categorie.name }} <span class="post-count">(13)</span></a>
                         </li>
-                        <li>
-                            <a href="#">技术文章 <span class="post-count">(11)</span></a>
-                        </li>
-                        <li>
-                            <a href="#">新闻 <span class="post-count">(8)</span></a>
-                        </li>
+                        {% empty %}
+                        暂无分类！
+                        {% endfor %}
                     </ul>
                 </div>
 
