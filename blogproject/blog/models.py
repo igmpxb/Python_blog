@@ -10,10 +10,12 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     def __unicode__(self):
         return self.name
+
 class Tag(models.Model):
     name = models.CharField(max_length=100)
     def __unicode__(self):
         return self.name
+
 class Post(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
@@ -24,11 +26,46 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     author = models.ForeignKey(User)
     click_rate = models.IntegerField(default=0)
+    top_weight = models.IntegerField(default=0)
+    img_url = models.CharField(max_length=300,blank=True)
     def __unicode__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+    def get_next_absolute_url(self):
+        if Post.objects.filter(pk=self.pk + 1) :
+            url = reverse('blog:detail', kwargs={'pk': self.pk + 1})
+            post_name = Post.objects.filter(pk=self.pk + 1)[0].title
+
+            dictinfo={
+                'url_info':url,
+                'title' : post_name,
+            }
+            return dictinfo
+        else:
+            dictinfo={
+                'url_info':"NULL",
+                'title' : "NULL",
+            }
+            return dictinfo
+    def get_pre_absolute_url(self):
+        if Post.objects.filter(pk=self.pk - 1) :
+            url = reverse('blog:detail', kwargs={'pk': self.pk - 1})
+            post_name = Post.objects.filter(pk=self.pk - 1)[0].title
+            dictinfo={
+                'url_info':url,
+                'title' : post_name,
+            }
+            return dictinfo
+
+        else:
+            dictinfo={
+                'url_info':"NULL",
+                'title' : "NULL",
+            }
+            return dictinfo
+
     def click_rate_add(self):
         self.click_rate=self.click_rate+1
         self.save()

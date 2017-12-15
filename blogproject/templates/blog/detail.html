@@ -1,82 +1,126 @@
 {% extends 'base.html' %}
-{% block main %}
-    <article class="post post-{{ post.pk }}">
-        <header class="entry-header">
-          <h1 class="entry-title">{{ post.title }}</h1>
-          <div class="entry-meta">
-            <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
-            <span class="post-date"><a href="#"><time class="entry-date"
-                                                    datetime="{{ post.created_time }}">{{ post.created_time }}</time></a></span>
-            <span class="post-author"><a href="#">{{ post.author }}</a></span>
-            <span class="comments-link"><a href="#">{{ post.comment_set.count }} 评论</a></span>
-            <span class="views-count"><a href="#">{{ post.click_rate }} 阅读</a></span>
-            </div>
-        </header>
-        <div class="entry-content clearfix">
-            {{ post.body|safe }}
-            <br> <br><br>
-        </div>
+{% load staticfiles %}
+{% load blog_tags %}
 
-    </article>
+{% block css %}
+    <link href="{% static 'blog2/css/new.css' %}" rel="stylesheet">
+{% endblock css %}
 
-    <section class="comment-area">
 
-        <ul class="comment-list list-unstyled">
-            <p style="color: #141314; font-size: 20px">评论列表，共{{ post.comment_set.count }}条评论</p>
-          {% for comment in comment_list %}
-          <li class="comment-item">
-            <span class="nickname">{{ comment.name }}</span>
-            <time class="submit-date">{{ comment.creater_time }}</time>
-            <div class="text">
-              {{ comment.text }}
-            </div>
-          </li>
+
+{% block article %}
+
+
+<article class="post post-{{ post.pk }}">
+  <h1 class="t_nav"><span>您当前的位置：<a href="/">首页</a>&nbsp;&gt;&nbsp;<a href="/news/s/">博文分享</a>&nbsp;&gt;&nbsp;<a href="{{ post.get_absolute_url }}">文章</a></span><a href="/" class="n1">网站首页</a><a href="/" class="n2">日记</a></h1>
+  <div class="index_about">
+    <h2 class="c_titile">{{ post.title }}</h2>
+    <p class="box_c"><span class="d_time">发布时间：{{ post.creater_time }}</span><span>编辑：{{ post.author }}</span><span>{{ post.comment_set.count }} 评论</span><span>{{ post.click_rate }} 阅读</span></p>
+    <ul class="infos">
+    {{ post.body|safe }}
+    </ul>
+    <div class="keybq">
+    <p><span>标签</span>：Django,python,测试</p>
+
+    </div>
+    <div class="ad"> </div>
+    <div class="nextinfo">
+      {% ifnotequal pre_url "NULL" %}
+      <p>上一篇：<a href="{{pre_url}}">{{pre_title}}</a></p>
+       {% endifnotequal %}
+      {% ifnotequal next_url "NULL" %}
+      <p>下一篇：<a href="{{next_url}}">{{next_title}}</a></p>
+      {% endifnotequal %}
+    </div>
+    <div class="otherlink">
+      <h2>相关文章</h2>
+      <ul>
+        <li><a href="/news/s/2013-07-25/524.html" title="现在，我相信爱情！">现在，我相信爱情！</a></li>
+        <li><a href="/newstalk/mood/2013-07-24/518.html" title="我希望我的爱情是这样的">我希望我的爱情是这样的</a></li>
+        <li><a href="/newstalk/mood/2013-07-02/335.html" title="有种情谊，不是爱情，也算不得友情">有种情谊，不是爱情，也算不得友情</a></li>
+        <li><a href="/newstalk/mood/2013-07-01/329.html" title="世上最美好的爱情">世上最美好的爱情</a></li>
+        <li><a href="/news/read/2013-06-11/213.html" title="爱情没有永远，地老天荒也走不完">爱情没有永远，地老天荒也走不完</a></li>
+        <li><a href="/news/s/2013-06-06/24.html" title="爱情的背叛者">爱情的背叛者</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="right">
+    <!-- Baidu Button BEGIN -->
+    <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare"><a class="bds_tsina"></a><a class="bds_qzone"></a><a class="bds_tqq"></a><a class="bds_renren"></a><span class="bds_more"></span><a class="shareCount"></a></div>
+    <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=6574585" ></script>
+    <script type="text/javascript" id="bdshell_js"></script>
+    <script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+    <!-- Baidu Button END -->
+    <div class="blank"></div>
+    <div class="news">
+      <h3>
+        <p>栏目<span>最新</span></p>
+      </h3>
+      <ul class="rank">
+      {% get_recent_posts as recent_posts_list %}
+      {% for post in recent_posts_list %}
+      <li><a href="{{ post.get_absolute_url }}" title="Column 三栏布局 个人网站模板" target="_blank">{{post.title}}</a></li>
+      {% empty %}
+      暂无文章
+      {% endfor %}
+      </ul>
+      <h3 class="ph">
+        <p>点击<span>排行</span></p>
+      </h3>
+        <ul class="paih">
+          {%  get_click_rate_posts as click_rate_posts_list%}
+          {% for post in click_rate_posts_list %}
+          <li><a href="{{ post.get_absolute_url }}" title="Column 三栏布局 个人网站模板" target="_blank">{{post.title}}</a></li>
           {% empty %}
-          暂无评论
+          暂无文章
           {% endfor %}
-        </ul>
 
-
-
-        <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">
-          {% csrf_token %}
-          <div class="row">
-            <div class="col-md-4">
-               <label for="{{ form.name.id_for_label }}">名字：</label>
-              {{ form.name }}
-              {{ form.name.errors }}
-            </div>
-
-            <div class="col-md-12">
-             <label for="{{ form.text.id_for_label }}">评论：</label>
-              {{ form.text }}
-              {{ form.text.errors }}
-              <button type="submit" class="comment-btn">发表</button>
-            </div>
-          </div>    <!-- row -->
-        </form>
-
-    </section>
-{% endblock main %}
-{% block toc %}
-    <div class="widget widget-content">
-        <h3 class="widget-title">文章目录</h3>
-        <ul>
-            <li>
-                <a href="#">hahah</a>
-            </li>
-            <li>
-                <a href="#">test</a>
-            </li>
-            <li>
-                <a href="#">在线预览</a>
-            </li>
-            <li>
-                <a href="#">资源列表</a>
-            </li>
-            <li>
-                <a href="#">获取帮助</a>
-            </li>
         </ul>
     </div>
-{% endblock toc %}
+    <div class="visitors">
+      <h3>
+        <p>最近访客</p>
+      </h3>
+      <ul>
+      </ul>
+    </div>
+  </aside>
+</article>
+{% endblock article %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

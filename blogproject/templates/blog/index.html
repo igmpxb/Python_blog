@@ -1,50 +1,95 @@
 {% extends 'base.html' %}
-{% block main %}
+{% load staticfiles %}
+{% load blog_tags %}
 
-    {% for post in post_list %}
-        <article class="post post-{{ post.pk }}">
-            <header class="entry-header">
-                <h1 class="entry-title">
-                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-                </h1>
-                <div class="entry-meta">
-                    <span class="post-category"><a href="#">{{ post.category.name}}</a></span>
-                    <span class="post-date"><a href="#"><time class="entry-date"
-                                                              datetime="{{ post.creater_time }}">{{ post.creater_time }}</time></a></span>
-                    <span class="post-author"><a href="#">{{ post.author }}</a></span>
-                    <span class="comments-link"><a href="#">{{ post.comment_set.count }} 评论</a></span>
-                    <span class="views-count"><a href="#">{{ post.click_rate }} 阅读</a></span>
-                </div>
-            </header>
-            <div class="entry-content clearfix">
-                 <p style="color: #ff0600">摘要：</p>
-                <p>{{ post.abstract }}.....</p>
-                <div class="read-more cl-effect-14">
-                    <a href="{{ post.get_absolute_url }}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
-                </div>
-            </div>
-        </article>
+{% block css %}
+<link href="{% static 'blog2/css/index.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block banner %}
+<div class="banner">
+  <section class="box">
+    <ul class="texts">
+      <p>此处应该有三行情诗。</p>
+      <p>可写给谁呢。</p>
+      <p>不写了......</p>
+    </ul>
+    <div class="avatar"><a href="#"><span>Liby</span></a> </div>
+  </section>
+</div>
+{% endblock banner %}
+
+
+{% block article %}
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=0 height=0 src="//music.163.com/outchain/player?type=2&id=460368978&auto=1&height=66"></iframe>
+<article>
+  <h2 class="title_tj">
+    <p>文章<span>推荐</span></p>
+  </h2>
+
+    <div class="bloglist left">
+    {% get_top_weight_posts as weight_posts_list %}
+    {% for post in weight_posts_list %}
+    <h3>{{post.title}}</h3>
+
+    {% ifnotequal post.img_url "" %}
+    <figure><img src="{{post.img_url}}"></figure>
+    {% else %}
+    <figure><img src="{% static 'blog2/images/001.png' %}"></figure>
+    {% endifnotequal %}
+    <ul>
+      <p>{{post.abstract}}...</p>
+      <a title="/" href="{{ post.get_absolute_url }}" target="_blank" class="readmore">阅读全文>></a>
+    </ul>
+    <p class="dateview"><span>{{post.creater_time}}</span><span>作者：{{post.author}}</span><span>个人博客：[<a href="/news/life/">{{ post.category.name }}</a>]</span><span>阅读量：{{ post.click_rate }}</span></p>
     {% empty %}
-        <div class="no-post">暂时还没有发布的文章！</div>
+    暂无文章
     {% endfor %}
-
-
-    <div class="pagination">
-        <ul>
-         {% if is_paginated %}
-        <div class="pagination-simple">
-          <!-- 如果当前页还有上一页，显示一个上一页的按钮 -->
-          {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
-          {% endif %}
-          <!-- 显示当前页面信息 -->
-          <span class="current">第 {{ page_obj.number }} 页 / 共 {{ paginator.num_pages }} 页</span>
-          <!-- 如果当前页还有下一页，显示一个下一页的按钮 -->
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
-          {% endif %}
-        </div>
-        {% endif %}
-        </ul>
     </div>
-{% endblock main %}
+  <aside class="right">
+    <div class="weather"><iframe width="250" scrolling="no" height="60" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=12&icon=1&num=1"></iframe></div>
+    <div class="news">
+    <h3>
+      <p>最新<span>文章</span></p>
+    </h3>
+    <ul class="rank">
+      {% get_recent_posts as recent_posts_list %}
+      {% for post in recent_posts_list %}
+      <li><a href="{{ post.get_absolute_url }}" title="Column 三栏布局 个人网站模板" target="_blank">{{post.title}}</a></li>
+      {% empty %}
+      暂无文章
+      {% endfor %}
+    </ul>
+    <h3 class="ph">
+      <p>点击<span>排行</span></p>
+    </h3>
+    <ul class="paih">
+      {%  get_click_rate_posts as click_rate_posts_list%}
+      {% for post in click_rate_posts_list %}
+      <li><a href="{{ post.get_absolute_url }}" title="Column 三栏布局 个人网站模板" target="_blank">{{post.title}}</a></li>
+      {% empty %}
+      暂无文章
+      {% endfor %}
+
+    </ul>
+    <h3 class="links">
+      <p>友情<span>链接</span></p>
+    </h3>
+    <ul class="website">
+      <li><a href="/">个人博客</a></li>
+      <li><a href="/">个人博客2</a></li>
+      <li><a href="/">个人博客3</a></li>
+      <li><a href="/">个人博客4</a></li>
+    </ul>
+    </div>
+    <!-- Baidu Button BEGIN -->
+    <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare"><a class="bds_tsina"></a><a class="bds_qzone"></a><a class="bds_tqq"></a><a class="bds_renren"></a><span class="bds_more"></span><a class="shareCount"></a></div>
+    <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=6574585" ></script>
+    <script type="text/javascript" id="bdshell_js"></script>
+    <script type="text/javascript">
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+    <!-- Baidu Button END -->
+    <a href="/" class="weixin"> </a></aside>
+</article>
+{% endblock article %}

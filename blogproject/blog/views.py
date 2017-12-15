@@ -10,9 +10,10 @@ class IndexView(ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
-    paginate_by = 3
+    paginate_by = 10
     def get_queryset(self):
         return super(IndexView, self).get_queryset().order_by('-creater_time')
+
 
 class CategoryView(ListView):
     model = Post
@@ -65,12 +66,20 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         # 覆写 get_context_data 的目的是因为除了将 post 传递给模板外（DetailView 已经帮我们完成），
         # 还要把评论表单、post 下的评论列表传递给模板。
+        post = super(PostDetailView, self).get_object(queryset=None)
         context = super(PostDetailView, self).get_context_data(**kwargs)
         form = CommentForm()
         comment_list = self.object.comment_set.all()
+        next_dictinfo = post.get_next_absolute_url()
+        pre_dictinfo = post.get_pre_absolute_url()
+        print next_dictinfo['url_info']
         context.update({
             'form': form,
-            'comment_list': comment_list
+            'comment_list': comment_list,
+            'next_url':next_dictinfo['url_info'],
+            'next_title': next_dictinfo['title'],
+            'pre_url':pre_dictinfo['url_info'],
+            'pre_title': pre_dictinfo['title'],
         })
         return context
 

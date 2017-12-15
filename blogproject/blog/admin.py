@@ -5,7 +5,7 @@ from django.contrib import admin
 
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'creater_time', 'modified_time', 'category', 'author']
+    list_display = ['title', 'creater_time', 'modified_time', 'category', 'author','top_weight','img_url',]
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
