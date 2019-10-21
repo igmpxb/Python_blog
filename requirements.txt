@@ -73,7 +73,7 @@ distorm3==3
 dnspython==1.12.0
 docutils==0.12
 easygui==0.96
-ecdsa==0.11
+ecdsa==0.13.3
 enum34==1.0.3
 esmre==0.3.1
 feedparser==5.1.3
