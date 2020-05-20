@@ -89,7 +89,7 @@ halberd==0.2.4
 hpack==1.1.0
 html2text==2015.6.21
 html5lib==0.999
-httplib2==0.9
+httplib2==0.18.0
 idna==2.0
 impacket==0.9.12
 ipaddress==1.0.14
