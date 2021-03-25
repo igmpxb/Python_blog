@@ -24,7 +24,7 @@ PyGithub==1.23.0
 PyOpenGL==3.0.2
 PySocks==1.5.0
 PyX==0.12.1
-PyYAML==3.11
+PyYAML==5.4
 Pygments==2.0.1
 SOAPpy==0.12.22
 SQLAlchemy==0.9.8
