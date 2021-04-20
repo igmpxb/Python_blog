@@ -38,7 +38,7 @@ Twisted-News==14.0.2
 Twisted-Runner==14.0.2
 Twisted-Web==14.0.2
 Twisted-Words==14.0.2
-Werkzeug==0.9.6
+Werkzeug==0.15.3
 XlsxWriter==0.5.2
 Yapsy==1.10.423
 adns-python==1.2.1
