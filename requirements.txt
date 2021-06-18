@@ -91,7 +91,7 @@ html2text==2015.6.21
 html5lib==0.999
 httplib2==0.9
 idna==2.0
-impacket==0.9.12
+impacket==0.9.23
 ipaddress==1.0.14
 itsdangerous==0.24
 jsonpickle==0.8.0
