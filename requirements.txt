@@ -28,7 +28,7 @@ PyYAML==3.11
 Pygments==2.0.1
 SOAPpy==0.12.22
 SQLAlchemy==0.9.8
-Twisted==14.0.2
+Twisted==22.2.0
 Twisted-Conch==14.0.2
 Twisted-Core==14.0.2
 Twisted-Lore==14.0.2
